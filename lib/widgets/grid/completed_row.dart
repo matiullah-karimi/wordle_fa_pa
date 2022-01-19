@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordle_fa_pa/utils/status.dart';
 import 'package:wordle_fa_pa/widgets/grid/cell.dart';
 
 class CompletedRow extends StatelessWidget {
@@ -7,12 +8,14 @@ class CompletedRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var splitGuess = guess.split('');
-
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        for (var guess in splitGuess) Cell(value: guess),
+        for (int i = 0; i < guess.length; i++)
+          Cell(
+            value: guess[i],
+            status: getGuessStatus(guess)[i],
+          ),
       ]),
     );
   }
