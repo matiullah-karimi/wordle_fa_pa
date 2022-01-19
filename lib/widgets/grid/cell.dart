@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_fa_pa/utils/status.dart';
 
-class Cell extends StatelessWidget {
+class Cell extends StatefulWidget {
   final String? value;
   final CharStatus? status;
 
@@ -11,23 +11,38 @@ class Cell extends StatelessWidget {
     this.value,
   }) : super(key: key);
 
-  Color getColor() {
-    Color color = Colors.grey.shade100;
+  @override
+  State<Cell> createState() => _CellState();
+}
 
-    if (status == CharStatus.correct) {
-      color = Colors.green.shade600;
-    } else if (status == CharStatus.present) {
-      color = Colors.orange.shade600;
-    } else if (status == CharStatus.absent) {
-      color = Colors.grey.shade600;
-    }
+class _CellState extends State<Cell> {
+  Color color = Colors.grey.shade100;
 
-    return color;
+  @override
+  initState() {
+    fillColors();
+    super.initState();
+  }
+
+  fillColors() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    setState(() {
+      if (widget.status == CharStatus.correct) {
+        color = Colors.green.shade600;
+      } else if (widget.status == CharStatus.present) {
+        color = Colors.orange.shade600;
+      } else if (widget.status == CharStatus.absent) {
+        color = Colors.grey.shade600;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.linear,
       width: 40,
       height: 40,
       margin: const EdgeInsets.symmetric(horizontal: 2),
@@ -37,13 +52,13 @@ class Cell extends StatelessWidget {
           width: 2,
         ),
         borderRadius: BorderRadius.circular(4),
-        color: getColor(),
+        color: color,
       ),
       child: Center(
         child: Text(
-          value ?? '',
+          widget.value ?? '',
           style: TextStyle(
-            color: status != null ? Colors.grey.shade100 : Colors.black,
+            color: widget.status != null ? Colors.grey.shade100 : Colors.black,
           ),
         ),
       ),
