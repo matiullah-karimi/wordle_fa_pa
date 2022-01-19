@@ -45,6 +45,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void clearState() {
+    setState(() {
+      guesses = [];
+      currentGuess = '';
+    });
+  }
+
   void changeLanguage() {
     setState(() {
       if (language == 'en') {
@@ -53,6 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
         language = 'en';
       }
     });
+
+    clearState();
   }
 
   void onDelete() {
@@ -96,30 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        backgroundColor: Colors.grey.shade800,
-        elevation: 0,
-        title: Text(widget.title),
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () => changeLanguage(),
-              child: const Icon(
-                Icons.language,
-                size: 26.0,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {},
-              child: const Icon(Icons.help),
-            ),
-          ),
-        ],
-      ),
+      appBar: _buildAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -154,6 +140,33 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      backgroundColor: Colors.grey.shade800,
+      elevation: 0,
+      title: Text(widget.title),
+      actions: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () => changeLanguage(),
+            child: const Icon(
+              Icons.language,
+              size: 26.0,
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () {},
+            child: const Icon(Icons.help),
+          ),
+        ),
+      ],
     );
   }
 }
