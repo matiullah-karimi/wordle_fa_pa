@@ -17,12 +17,12 @@ class Cell extends StatelessWidget {
       height: 40,
       margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey.shade300,
-          width: 2,
-        ),
-      ),
-      child: Text(value ?? ''),
+          border: Border.all(
+            color: Colors.grey.shade300,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(4)),
+      child: Center(child: Text(value ?? '')),
     );
   }
 }

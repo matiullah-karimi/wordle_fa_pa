@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_fa_pa/widgets/grid/grid.dart';
+import 'package:wordle_fa_pa/widgets/keyboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Wordle Persian & Pashto'),
     );
   }
 }
@@ -29,14 +30,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   List<String> guesses = [];
   String currentGuess = '';
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    setState(() {});
+  }
+
+  void onChar(String value) {
+    if (currentGuess.length < 5 && guesses.length < 6) {
+      setState(() {
+        currentGuess = currentGuess + value;
+      });
+    }
   }
 
   @override
@@ -49,7 +55,17 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Grid(guesses: guesses, currentGuess: currentGuess)
+            Grid(guesses: guesses, currentGuess: currentGuess),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.primaries[0], // background
+                onPrimary: Colors.white, // foreground
+              ),
+              onPressed: () {},
+              child: const Text('Submit'),
+            ),
+            const SizedBox(height: 16),
+            Keyboard(guesses: guesses, onChar: onChar)
           ],
         ),
       ),
