@@ -1,9 +1,6 @@
-import 'package:wordle_fa_pa/utils/words.dart';
-
 enum CharStatus { absent, present, correct }
-String solution = getWordOfDay()['solution'];
 
-Map<int, CharStatus> getGuessStatus(String guess) {
+Map<int, CharStatus> getGuessStatus(String guess, String solution) {
   Map<int, CharStatus> result = {};
   var takenIndexes = {};
 

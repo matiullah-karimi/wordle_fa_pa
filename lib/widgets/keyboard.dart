@@ -5,14 +5,28 @@ import 'package:wordle_fa_pa/widgets/keyboard/key.dart';
 class Keyboard extends StatelessWidget {
   final Function(String char) onChar;
   final List<String> guesses;
-  const Keyboard({Key? key, required this.guesses, required this.onChar})
-      : super(key: key);
+  final String language;
+
+  const Keyboard({
+    Key? key,
+    required this.guesses,
+    required this.onChar,
+    required this.language,
+  }) : super(key: key);
+
+  getKeyboardByLang() {
+    if (language == 'en') {
+      return kEnglishKeys;
+    }
+
+    return kPersianKeys;
+  }
 
   @override
   Widget build(BuildContext context) {
     List<Row> keyboardLines = [];
 
-    for (var line in kEnglishKeys) {
+    for (var line in getKeyboardByLang()) {
       List<KeyboardKey> keys = [];
 
       for (var key in line) {
@@ -28,8 +42,11 @@ class Keyboard extends StatelessWidget {
       ));
     }
 
-    return Column(
-      children: keyboardLines,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Column(
+        children: keyboardLines,
+      ),
     );
   }
 }

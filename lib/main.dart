@@ -35,10 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String currentGuess = '';
   bool isGameWon = false;
   bool isGameLost = false;
-
-  void _incrementCounter() {
-    setState(() {});
-  }
+  String language = 'en';
 
   void onChar(String value) {
     if (currentGuess.length < 5 && guesses.length < 6) {
@@ -46,6 +43,16 @@ class _MyHomePageState extends State<MyHomePage> {
         currentGuess = currentGuess + value;
       });
     }
+  }
+
+  void changeLanguage() {
+    setState(() {
+      if (language == 'en') {
+        language = 'fa';
+      } else {
+        language = 'en';
+      }
+    });
   }
 
   void onDelete() {
@@ -57,11 +64,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void onSubmit() {
-    if (!isWordInWordList(currentGuess)) {
+    if (!isWordInWordList(currentGuess, language)) {
       // word is not in words list
     }
 
-    bool winningWord = isWinningWord(currentGuess);
+    bool winningWord = isWinningWord(currentGuess, language);
 
     if (currentGuess.length == 5 && guesses.length < 6 && !isGameWon) {
       setState(() {
@@ -88,8 +95,30 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
+        backgroundColor: Colors.grey.shade800,
+        elevation: 0,
         title: Text(widget.title),
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () => changeLanguage(),
+              child: const Icon(
+                Icons.language,
+                size: 26.0,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {},
+              child: const Icon(Icons.help),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -98,7 +127,15 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text('Game Lost: ' + isGameLost.toString()),
             Text('Game Won: ' + isGameWon.toString()),
-            Grid(guesses: guesses, currentGuess: currentGuess),
+            Directionality(
+              textDirection:
+                  language == 'en' ? TextDirection.ltr : TextDirection.rtl,
+              child: Grid(
+                guesses: guesses,
+                currentGuess: currentGuess,
+                language: language,
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -113,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             const SizedBox(height: 16),
-            Keyboard(guesses: guesses, onChar: onChar)
+            Keyboard(guesses: guesses, onChar: onChar, language: language)
           ],
         ),
       ),

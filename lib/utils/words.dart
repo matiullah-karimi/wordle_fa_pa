@@ -1,15 +1,20 @@
 import 'package:wordle_fa_pa/data/wordslist.dart';
 
-bool isWordInWordList(String word) {
-  return kEnglishWords.contains(word.toLowerCase());
+bool isWordInWordList(String word, String lang) {
+  return getWordsByLang(lang).contains(word.toLowerCase());
 }
 
-bool isWinningWord(String word) {
-  print(getWordOfDay()['solution']);
-  return getWordOfDay()['solution'] == word;
+getWordsByLang(String language) {
+  if (language == 'en') return kEnglishWords;
+  if (language == 'fa') return kPersianWords;
 }
 
-getWordOfDay() {
+bool isWinningWord(String word, String lang) {
+  print(getWordOfDay(lang)['solution']);
+  return getWordOfDay(lang)['solution'] == word;
+}
+
+getWordOfDay(String lang) {
   // January 1, 2022 Game Epoch
   const epochMs = 1641013200000;
   var now = DateTime.now();
@@ -17,7 +22,7 @@ getWordOfDay() {
   var index = ((now.millisecondsSinceEpoch - epochMs) / msInDay).floor();
 
   return {
-    'solution': kEnglishWords[index].toUpperCase(),
+    'solution': getWordsByLang(lang)[index].toUpperCase(),
     'solutionIndex': index,
   };
 }
