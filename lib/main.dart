@@ -83,14 +83,12 @@ class _MyHomePageState extends State<MyHomePage> {
       resultMessage = 'Word does not exist';
 
       setState(() {});
-      return;
+      // return;
     }
 
     bool winningWord = isWinningWord(currentGuess, language);
 
-    if (currentGuess.length == 5 &&
-        guesses.length < 6 &&
-        gameResult == GameResult.none) {
+    if (currentGuess.length == 5 && guesses.length <= 6) {
       guesses.add(currentGuess);
       currentGuess = '';
 
@@ -104,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return;
       }
 
-      if (guesses.length == 5) {
+      if (guesses.length == 6) {
         gameResult = GameResult.fail;
         resultMessage = 'You failed to find the word';
         messageType = MessageType.error;
@@ -141,24 +139,34 @@ class _MyHomePageState extends State<MyHomePage> {
                 language: language,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.green, // background
-                    onPrimary: Colors.white, // foreground
-                  ),
-                  onPressed: () => onSubmit(),
-                  child: const Text('Submit'),
-                ),
-              ],
-            ),
+            _buildActionButtons(),
             const SizedBox(height: 16),
-            Keyboard(guesses: guesses, onChar: onChar, language: language)
+            Keyboard(guesses: guesses, onChar: onChar, language: language),
           ],
         ),
       ),
+    );
+  }
+
+  ElevatedButton _buildActionButtons() {
+    if (gameResult != GameResult.none) {
+      return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.blue, // background
+          onPrimary: Colors.white, // foreground
+        ),
+        onPressed: () => clearState(),
+        child: const Text('Reset'),
+      );
+    }
+
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.green, // background
+        onPrimary: Colors.white, // foreground
+      ),
+      onPressed: () => onSubmit(),
+      child: const Text('Submit'),
     );
   }
 
