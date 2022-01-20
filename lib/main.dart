@@ -3,7 +3,7 @@ import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/utils/words.dart';
 import 'package:wordle_fa_pa/widgets/grid/grid.dart';
 import 'package:wordle_fa_pa/widgets/keyboard.dart';
-import 'package:wordle_fa_pa/widgets/result.dart';
+import 'package:wordle_fa_pa/widgets/flash_message.dart';
 
 void main() {
   runApp(const MyApp());
@@ -76,6 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void onSubmit() {
+    if (currentGuess.isEmpty) return;
+
     if (!isWordInWordList(currentGuess, language)) {
       messageType = MessageType.info;
       resultMessage = 'Word does not exist';
@@ -125,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            ResultMessage(
+            FlashMessage(
               message: resultMessage,
               type: messageType,
               onClose: () => onResultMessageClose(),

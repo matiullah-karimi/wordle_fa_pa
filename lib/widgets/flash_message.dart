@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 
-class ResultMessage extends StatefulWidget {
+class FlashMessage extends StatefulWidget {
   final String message;
   final MessageType type;
   final Function onClose;
 
-  const ResultMessage(
+  const FlashMessage(
       {Key? key,
       required this.message,
       required this.type,
@@ -14,10 +14,10 @@ class ResultMessage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ResultMessage> createState() => _ResultMessageState();
+  State<FlashMessage> createState() => _FlashMessageState();
 }
 
-class _ResultMessageState extends State<ResultMessage>
+class _FlashMessageState extends State<FlashMessage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   double offsetX = 400;
