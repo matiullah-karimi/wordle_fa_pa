@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/utils/words.dart';
 import 'package:wordle_fa_pa/widgets/grid/grid.dart';
 import 'package:wordle_fa_pa/widgets/keyboard.dart';
 import 'package:wordle_fa_pa/widgets/flash_message.dart';
+import 'package:wordle_fa_pa/ads/rewarded_ad.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 
@@ -39,6 +43,18 @@ class _MyHomePageState extends State<MyHomePage> {
   String resultMessage = '';
   MessageType messageType = MessageType.info;
   GameResult gameResult = GameResult.none;
+  late GoogleRewardedAd ad;
+
+  @override
+  void initState() {
+    ad = GoogleRewardedAd().load();
+
+    super.initState();
+  }
+
+  showRewardedAd() {
+    Future.delayed(const Duration(seconds: 3)).then((value) => ad.show());
+  }
 
   void onChar(String value) {
     if (value == 'clear') {
@@ -57,6 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       guesses = [];
       currentGuess = '';
+      resultMessage = '';
+      gameResult = GameResult.none;
     });
   }
 
@@ -104,6 +122,8 @@ class _MyHomePageState extends State<MyHomePage> {
         messageType = MessageType.success;
         setState(() {});
 
+        // show rewarded ad
+        showRewardedAd();
         return;
       }
 
@@ -111,6 +131,10 @@ class _MyHomePageState extends State<MyHomePage> {
         gameResult = GameResult.fail;
         resultMessage = 'You failed to find the word';
         messageType = MessageType.error;
+        setState(() {});
+
+        // show rewarded ad
+        showRewardedAd();
       }
     }
   }
