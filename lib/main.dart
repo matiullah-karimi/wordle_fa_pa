@@ -125,29 +125,31 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: _buildAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            FlashMessage(
-              message: resultMessage,
-              type: messageType,
-              onClose: () => onResultMessageClose(),
-            ),
-            Directionality(
-              textDirection:
-                  language == 'en' ? TextDirection.ltr : TextDirection.rtl,
-              child: Grid(
-                guesses: guesses,
-                currentGuess: currentGuess,
-                language: language,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              FlashMessage(
+                message: resultMessage,
+                type: messageType,
+                onClose: () => onResultMessageClose(),
               ),
-            ),
-            _buildActionButtons(),
-            const SizedBox(height: 16),
-            Keyboard(guesses: guesses, onChar: onChar, language: language),
-          ],
+              Directionality(
+                textDirection:
+                    language == 'en' ? TextDirection.ltr : TextDirection.rtl,
+                child: Grid(
+                  guesses: guesses,
+                  currentGuess: currentGuess,
+                  language: language,
+                ),
+              ),
+              _buildActionButtons(),
+              const SizedBox(height: 16),
+              Keyboard(guesses: guesses, onChar: onChar, language: language),
+            ],
+          ),
         ),
       ),
     );
