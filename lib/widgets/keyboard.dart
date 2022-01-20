@@ -27,12 +27,14 @@ class Keyboard extends StatelessWidget {
     List<Row> keyboardLines = [];
 
     for (var line in getKeyboardByLang()) {
-      List<KeyboardKey> keys = [];
+      List<Expanded> keys = [];
 
       for (var key in line) {
-        keys.add(KeyboardKey(
-          value: key,
-          onClick: (String value) => onChar(value),
+        keys.add(Expanded(
+          child: KeyboardKey(
+            value: key,
+            onClick: (String value) => onChar(value),
+          ),
         ));
       }
 
@@ -42,11 +44,8 @@ class Keyboard extends StatelessWidget {
       ));
     }
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Column(
-        children: keyboardLines,
-      ),
+    return Column(
+      children: keyboardLines,
     );
   }
 }

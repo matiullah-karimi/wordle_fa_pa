@@ -41,6 +41,11 @@ class _MyHomePageState extends State<MyHomePage> {
   GameResult gameResult = GameResult.none;
 
   void onChar(String value) {
+    if (value == 'clear') {
+      onDelete();
+      return;
+    }
+
     if (currentGuess.length < 5 && guesses.length < 6) {
       setState(() {
         currentGuess = currentGuess + value;
