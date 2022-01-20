@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/utils/words.dart';
 import 'package:wordle_fa_pa/widgets/grid/grid.dart';
 import 'package:wordle_fa_pa/widgets/keyboard.dart';
+import 'package:wordle_fa_pa/widgets/result.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,9 +35,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> guesses = [];
   String currentGuess = '';
-  bool isGameWon = false;
-  bool isGameLost = false;
   String language = 'en';
+  String resultMessage = '';
+  MessageType messageType = MessageType.info;
+  GameResult gameResult = GameResult.none;
 
   void onChar(String value) {
     if (currentGuess.length < 5 && guesses.length < 6) {
@@ -74,31 +77,42 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void onSubmit() {
     if (!isWordInWordList(currentGuess, language)) {
-      // word is not in words list
+      messageType = MessageType.info;
+      resultMessage = 'Word does not exist';
+
+      setState(() {});
+      return;
     }
 
     bool winningWord = isWinningWord(currentGuess, language);
 
-    if (currentGuess.length == 5 && guesses.length < 6 && !isGameWon) {
-      setState(() {
-        guesses.add(currentGuess);
-        currentGuess = '';
-      });
+    if (currentGuess.length == 5 &&
+        guesses.length < 6 &&
+        gameResult == GameResult.none) {
+      guesses.add(currentGuess);
+      currentGuess = '';
 
       if (winningWord) {
-        setState(() {
-          isGameWon = true;
-        });
+        gameResult = GameResult.win;
+        resultMessage = 'You found the word correctly';
+
+        messageType = MessageType.success;
+        setState(() {});
 
         return;
       }
 
       if (guesses.length == 5) {
-        setState(() {
-          isGameLost = true;
-        });
+        gameResult = GameResult.fail;
+        resultMessage = 'You failed to find the word';
+        messageType = MessageType.error;
       }
     }
+  }
+
+  onResultMessageClose() {
+    resultMessage = '';
+    setState(() {});
   }
 
   @override
@@ -111,8 +125,11 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text('Game Lost: ' + isGameLost.toString()),
-            Text('Game Won: ' + isGameWon.toString()),
+            ResultMessage(
+              message: resultMessage,
+              type: messageType,
+              onClose: () => onResultMessageClose(),
+            ),
             Directionality(
               textDirection:
                   language == 'en' ? TextDirection.ltr : TextDirection.rtl,

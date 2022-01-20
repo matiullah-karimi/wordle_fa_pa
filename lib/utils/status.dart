@@ -1,4 +1,4 @@
-enum CharStatus { absent, present, correct }
+import 'package:wordle_fa_pa/types/enum_types.dart';
 
 Map<int, CharStatus> getGuessStatus(String guess, String solution) {
   Map<int, CharStatus> result = {};

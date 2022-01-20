@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wordle_fa_pa/utils/status.dart';
+import 'package:wordle_fa_pa/types/enum_types.dart';
 
 class Cell extends StatefulWidget {
   final String? value;
