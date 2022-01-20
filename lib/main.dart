@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/utils/words.dart';
+import 'package:wordle_fa_pa/widgets/banner_ad.dart';
 import 'package:wordle_fa_pa/widgets/grid/grid.dart';
 import 'package:wordle_fa_pa/widgets/keyboard.dart';
 import 'package:wordle_fa_pa/widgets/flash_message.dart';
