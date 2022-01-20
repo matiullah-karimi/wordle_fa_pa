@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:wordle_fa_pa/data/keyboard.dart';
+import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/widgets/keyboard/key.dart';
 
 class Keyboard extends StatelessWidget {
   final Function(String char) onChar;
   final List<String> guesses;
-  final String language;
+  final AppLang language;
 
   const Keyboard({
     Key? key,
@@ -15,8 +16,12 @@ class Keyboard extends StatelessWidget {
   }) : super(key: key);
 
   getKeyboardByLang() {
-    if (language == 'en') {
+    if (language == AppLang.english) {
       return kEnglishKeys;
+    }
+
+    if (language == AppLang.pashto) {
+      return kPashtoKeys;
     }
 
     return kPersianKeys;

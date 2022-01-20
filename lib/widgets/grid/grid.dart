@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/widgets/grid/completed_row.dart';
 import 'package:wordle_fa_pa/widgets/grid/current_row.dart';
 import 'package:wordle_fa_pa/widgets/grid/empty_row.dart';
@@ -6,7 +7,7 @@ import 'package:wordle_fa_pa/widgets/grid/empty_row.dart';
 class Grid extends StatelessWidget {
   final List<String> guesses;
   final String currentGuess;
-  final String language;
+  final AppLang language;
 
   const Grid({
     Key? key,

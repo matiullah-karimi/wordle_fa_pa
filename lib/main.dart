@@ -40,7 +40,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<String> guesses = [];
   String currentGuess = '';
-  String language = 'en';
+  AppLang language = AppLang.persian;
   String resultMessage = '';
   MessageType messageType = MessageType.info;
   GameResult gameResult = GameResult.none;
@@ -81,10 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void changeLanguage() {
     setState(() {
-      if (language == 'en') {
-        language = 'fa';
+      if (language == AppLang.english) {
+        language = AppLang.persian;
       } else {
-        language = 'en';
+        language = AppLang.pashto;
       }
     });
 
@@ -164,7 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onClose: () => onResultMessageClose(),
                   ),
                   Directionality(
-                    textDirection: language == 'en'
+                    textDirection: language == AppLang.english
                         ? TextDirection.ltr
                         : TextDirection.rtl,
                     child: Grid(
@@ -176,7 +176,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   _buildActionButtons(),
                   const SizedBox(height: 16),
                   Keyboard(
-                      guesses: guesses, onChar: onChar, language: language),
+                    guesses: guesses,
+                    onChar: onChar,
+                    language: language,
+                  ),
                 ],
               ),
             ),
