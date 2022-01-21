@@ -7,6 +7,7 @@ import 'package:wordle_fa_pa/widgets/grid/grid.dart';
 import 'package:wordle_fa_pa/widgets/keyboard.dart';
 import 'package:wordle_fa_pa/widgets/flash_message.dart';
 import 'package:wordle_fa_pa/ads/rewarded_ad.dart';
+import 'package:wordle_fa_pa/widgets/language_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,15 +81,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void changeLanguage() {
-    setState(() {
-      if (language == AppLang.english) {
-        language = AppLang.persian;
-      } else {
-        language = AppLang.pashto;
-      }
-    });
-
-    clearState();
+    LanguageDialog(
+      onItemClicked: (lang) {
+        setState(() {
+          language = lang;
+        });
+        clearState();
+      },
+      context: context,
+      currentLang: language,
+    ).show();
+    // clearState();
   }
 
   void onDelete() {
