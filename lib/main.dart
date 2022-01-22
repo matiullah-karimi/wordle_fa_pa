@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:wordle_fa_pa/data/translations.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/utils/words.dart';
 import 'package:wordle_fa_pa/widgets/banner_ad.dart';
@@ -121,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (winningWord) {
         gameResult = GameResult.win;
-        resultMessage = 'You found the word correctly';
+        resultMessage = translate('win', language);
 
         messageType = MessageType.success;
         setState(() {});
@@ -133,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (guesses.length == 6) {
         gameResult = GameResult.fail;
-        resultMessage = 'You failed to find the word';
+        resultMessage = translate('lose', language);
         messageType = MessageType.error;
         setState(() {});
 
@@ -161,15 +162,16 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  FlashMessage(
-                    message: resultMessage,
-                    type: messageType,
-                    onClose: () => onResultMessageClose(),
+                  Directionality(
+                    textDirection: language.direction,
+                    child: FlashMessage(
+                      message: resultMessage,
+                      type: messageType,
+                      onClose: () => onResultMessageClose(),
+                    ),
                   ),
                   Directionality(
-                    textDirection: language == AppLang.english
-                        ? TextDirection.ltr
-                        : TextDirection.rtl,
+                    textDirection: language.direction,
                     child: Grid(
                       guesses: guesses,
                       currentGuess: currentGuess,
@@ -204,17 +206,19 @@ class _MyHomePageState extends State<MyHomePage> {
           onPrimary: Colors.white, // foreground
         ),
         onPressed: () => clearState(),
-        child: const Text('Reset'),
+        child: Text(translate('reset', language)),
       );
     }
 
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Colors.green, // background
+        primary: currentGuess.length == 5
+            ? Colors.green
+            : Colors.green.shade300, // background
         onPrimary: Colors.white, // foreground
       ),
-      onPressed: () => onSubmit(),
-      child: const Text('Submit'),
+      onPressed: () => currentGuess.length == 5 ? onSubmit() : null,
+      child: Text(translate('try', language)),
     );
   }
 
