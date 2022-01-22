@@ -4,11 +4,12 @@ import 'package:wordle_fa_pa/data/translations.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/utils/words.dart';
 import 'package:wordle_fa_pa/widgets/banner_ad.dart';
+import 'package:wordle_fa_pa/widgets/dialogs/help_dialog.dart';
 import 'package:wordle_fa_pa/widgets/grid/grid.dart';
 import 'package:wordle_fa_pa/widgets/keyboard.dart';
 import 'package:wordle_fa_pa/widgets/flash_message.dart';
 import 'package:wordle_fa_pa/ads/rewarded_ad.dart';
-import 'package:wordle_fa_pa/widgets/language_dialog.dart';
+import 'package:wordle_fa_pa/widgets/dialogs/language_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -241,7 +242,8 @@ class _MyHomePageState extends State<MyHomePage> {
         Padding(
           padding: const EdgeInsets.only(right: 20.0),
           child: GestureDetector(
-            onTap: () {},
+            onTap: () =>
+                HelpDialog(context: context, currentLang: language).show(),
             child: const Icon(Icons.help),
           ),
         ),
