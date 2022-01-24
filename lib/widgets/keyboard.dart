@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wordle_fa_pa/data/keyboard.dart';
+import 'package:wordle_fa_pa/state/app_lang.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/widgets/keyboard/key.dart';
 
-class Keyboard extends StatelessWidget {
+class Keyboard extends ConsumerWidget {
   final Function(String char) onChar;
   final List<String> guesses;
-  final AppLang language;
 
   const Keyboard({
     Key? key,
     required this.guesses,
     required this.onChar,
-    required this.language,
   }) : super(key: key);
 
-  getKeyboardByLang() {
+  getKeyboardByLang(AppLang language) {
     if (language == AppLang.english) {
       return kEnglishKeys;
     }
@@ -28,10 +28,11 @@ class Keyboard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     List<Row> keyboardLines = [];
+    AppLang lang = ref.watch(appLangProvider);
 
-    for (var line in getKeyboardByLang()) {
+    for (var line in getKeyboardByLang(lang)) {
       List<Expanded> keys = [];
 
       for (var key in line) {

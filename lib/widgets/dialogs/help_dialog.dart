@@ -29,7 +29,6 @@ class HelpDialog {
               const SizedBox(height: 24),
               CompletedRow(
                 guess: translate('help_guess', currentLang),
-                language: currentLang,
                 solution: translate('help_solution', currentLang),
               ),
               Text(translate('help_correct', currentLang)),

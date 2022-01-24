@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wordle_fa_pa/data/translations.dart';
+import 'package:wordle_fa_pa/state/app_lang.dart';
+import 'package:wordle_fa_pa/state/translations.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/utils/words.dart';
 import 'package:wordle_fa_pa/widgets/banner_ad.dart';
@@ -14,7 +17,7 @@ import 'package:wordle_fa_pa/widgets/dialogs/language_dialog.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await MobileAds.instance.initialize();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -31,19 +34,18 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   List<String> guesses = [];
   String currentGuess = '';
-  AppLang language = AppLang.persian;
   String resultMessage = '';
   MessageType messageType = MessageType.info;
   GameResult gameResult = GameResult.none;
@@ -85,13 +87,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void changeLanguage() {
     LanguageDialog(
       onItemClicked: (lang) {
-        setState(() {
-          language = lang;
-        });
+        ref.read(appLangProvider.notifier).change(lang);
+
         clearState();
       },
       context: context,
-      currentLang: language,
+      currentLang: ref.read(appLangProvider),
     ).show();
     // clearState();
   }
@@ -107,15 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void onSubmit() {
     if (currentGuess.isEmpty) return;
 
-    if (!isWordInWordList(currentGuess, language)) {
-      messageType = MessageType.info;
-      resultMessage = 'Word does not exist';
-
-      setState(() {});
-      // return;
-    }
-
-    bool winningWord = isWinningWord(currentGuess, language);
+    bool winningWord = isWinningWord(currentGuess, ref.read(appLangProvider));
 
     if (currentGuess.length == 5 && guesses.length <= 6) {
       guesses.add(currentGuess);
@@ -123,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (winningWord) {
         gameResult = GameResult.win;
-        resultMessage = translate('win', language);
+        resultMessage = ref.read(translationProvider('win'));
 
         messageType = MessageType.success;
         setState(() {});
@@ -135,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       if (guesses.length == 6) {
         gameResult = GameResult.fail;
-        resultMessage = translate('lose', language);
+        resultMessage = ref.read(translationProvider('lose'));
         messageType = MessageType.error;
         setState(() {});
 
@@ -152,6 +145,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final language = ref.watch(appLangProvider);
+
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: _buildAppBar(),
@@ -176,7 +171,6 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Grid(
                       guesses: guesses,
                       currentGuess: currentGuess,
-                      language: language,
                     ),
                   ),
                   _buildActionButtons(),
@@ -184,7 +178,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   Keyboard(
                     guesses: guesses,
                     onChar: onChar,
-                    language: language,
                   ),
                 ],
               ),
@@ -207,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPrimary: Colors.white, // foreground
         ),
         onPressed: () => clearState(),
-        child: Text(translate('reset', language)),
+        child: Text(ref.read(translationProvider('reset'))),
       );
     }
 
@@ -219,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPrimary: Colors.white, // foreground
       ),
       onPressed: () => currentGuess.length == 5 ? onSubmit() : null,
-      child: Text(translate('try', language)),
+      child: Text(ref.read(translationProvider('try'))),
     );
   }
 
@@ -242,8 +235,9 @@ class _MyHomePageState extends State<MyHomePage> {
         Padding(
           padding: const EdgeInsets.only(right: 20.0),
           child: GestureDetector(
-            onTap: () =>
-                HelpDialog(context: context, currentLang: language).show(),
+            onTap: () => HelpDialog(
+                    context: context, currentLang: ref.read(appLangProvider))
+                .show(),
             child: const Icon(Icons.help),
           ),
         ),
