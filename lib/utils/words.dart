@@ -12,19 +12,15 @@ getWordsByLang(AppLang language) {
 }
 
 bool isWinningWord(String word, AppLang lang) {
-  print(getWordOfDay(lang)['solution']);
-  return getWordOfDay(lang)['solution'] == word;
+  return getWordOfDay(lang) == word;
 }
 
-getWordOfDay(AppLang lang) {
+String getWordOfDay(AppLang lang) {
   // January 1, 2022 Game Epoch
   const epochMs = 1641013200000;
   var now = DateTime.now();
   const msInDay = 86400000;
   var index = ((now.millisecondsSinceEpoch - epochMs) / msInDay).floor();
 
-  return {
-    'solution': getWordsByLang(lang)[index].toUpperCase(),
-    'solutionIndex': index,
-  };
+  return getWordsByLang(lang)[index].toUpperCase();
 }

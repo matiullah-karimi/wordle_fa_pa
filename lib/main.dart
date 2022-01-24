@@ -107,8 +107,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
   void onSubmit() {
     if (currentGuess.isEmpty) return;
+    final lang = ref.read(appLangProvider);
 
-    bool winningWord = isWinningWord(currentGuess, ref.read(appLangProvider));
+    bool winningWord = isWinningWord(currentGuess, lang);
 
     if (currentGuess.length == 5 && guesses.length <= 6) {
       guesses.add(currentGuess);
@@ -117,25 +118,24 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       if (winningWord) {
         gameResult = GameResult.win;
         resultMessage = ref.read(translationProvider('win'));
-
         messageType = MessageType.success;
-        setState(() {});
 
         // show rewarded ad
         showRewardedAd();
-        return;
       }
 
-      if (guesses.length == 6) {
+      if (guesses.length == 6 && !winningWord) {
         gameResult = GameResult.fail;
-        resultMessage = ref.read(translationProvider('lose'));
+        resultMessage =
+            ref.read(translationProvider('lose')) + ' ' + getWordOfDay(lang);
         messageType = MessageType.error;
-        setState(() {});
 
         // show rewarded ad
         showRewardedAd();
       }
     }
+
+    setState(() {});
   }
 
   onResultMessageClose() {

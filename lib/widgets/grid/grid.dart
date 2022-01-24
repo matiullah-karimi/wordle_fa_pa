@@ -21,7 +21,7 @@ class Grid extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     AppLang lang = ref.watch(appLangProvider);
     var empties = guesses.length < 5 ? List.filled(5 - guesses.length, {}) : [];
-    String solution = getWordOfDay(lang)['solution'];
+    String solution = getWordOfDay(lang);
 
     return Container(
       padding: const EdgeInsets.only(bottom: 6),
