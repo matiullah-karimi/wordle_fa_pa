@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:wordle_fa_pa/data/wordslist.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 
@@ -11,16 +13,9 @@ getWordsByLang(AppLang language) {
   if (language == AppLang.pashto) return kPashtoWords;
 }
 
-bool isWinningWord(String word, AppLang lang) {
-  return getWordOfDay(lang) == word;
-}
+String getRandomWord(AppLang lang) {
+  final _random = Random();
+  final list = getWordsByLang(lang);
 
-String getWordOfDay(AppLang lang) {
-  // January 1, 2022 Game Epoch
-  const epochMs = 1641013200000;
-  var now = DateTime.now();
-  const msInDay = 86400000;
-  var index = ((now.millisecondsSinceEpoch - epochMs) / msInDay).floor();
-
-  return getWordsByLang(lang)[index].toUpperCase();
+  return list[_random.nextInt(list.length)].toUpperCase();
 }

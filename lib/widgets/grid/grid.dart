@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wordle_fa_pa/state/app_lang.dart';
+import 'package:wordle_fa_pa/state/word.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
-import 'package:wordle_fa_pa/utils/words.dart';
 import 'package:wordle_fa_pa/widgets/grid/completed_row.dart';
 import 'package:wordle_fa_pa/widgets/grid/current_row.dart';
 import 'package:wordle_fa_pa/widgets/grid/empty_row.dart';
@@ -21,7 +21,7 @@ class Grid extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     AppLang lang = ref.watch(appLangProvider);
     var empties = guesses.length < 5 ? List.filled(5 - guesses.length, {}) : [];
-    String solution = getWordOfDay(lang);
+    String solution = ref.watch(wordProvider);
 
     return Container(
       padding: const EdgeInsets.only(bottom: 6),

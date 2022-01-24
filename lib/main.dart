@@ -4,6 +4,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:wordle_fa_pa/data/translations.dart';
 import 'package:wordle_fa_pa/state/app_lang.dart';
 import 'package:wordle_fa_pa/state/translations.dart';
+import 'package:wordle_fa_pa/state/word.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
 import 'package:wordle_fa_pa/utils/words.dart';
 import 'package:wordle_fa_pa/widgets/banner_ad.dart';
@@ -76,6 +77,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   }
 
   void clearState() {
+    ref.read(wordProvider.notifier).change();
     setState(() {
       guesses = [];
       currentGuess = '';
@@ -108,8 +110,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   void onSubmit() {
     if (currentGuess.isEmpty) return;
     final lang = ref.read(appLangProvider);
+    final solution = ref.read(wordProvider);
 
-    bool winningWord = isWinningWord(currentGuess, lang);
+    bool winningWord = solution == currentGuess;
 
     if (currentGuess.length == 5 && guesses.length <= 6) {
       guesses.add(currentGuess);
@@ -126,8 +129,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
       if (guesses.length == 6 && !winningWord) {
         gameResult = GameResult.fail;
-        resultMessage =
-            ref.read(translationProvider('lose')) + ' ' + getWordOfDay(lang);
+        resultMessage = ref.read(translationProvider('lose')) + ' ' + solution;
         messageType = MessageType.error;
 
         // show rewarded ad
