@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:wordle_fa_pa/data/translations.dart';
 import 'package:wordle_fa_pa/state/app_lang.dart';
 import 'package:wordle_fa_pa/state/translations.dart';
 import 'package:wordle_fa_pa/state/word.dart';
 import 'package:wordle_fa_pa/types/enum_types.dart';
-import 'package:wordle_fa_pa/utils/words.dart';
-import 'package:wordle_fa_pa/widgets/banner_ad.dart';
 import 'package:wordle_fa_pa/widgets/dialogs/help_dialog.dart';
 import 'package:wordle_fa_pa/widgets/grid/grid.dart';
 import 'package:wordle_fa_pa/widgets/keyboard.dart';
 import 'package:wordle_fa_pa/widgets/flash_message.dart';
-import 'package:wordle_fa_pa/ads/rewarded_ad.dart';
 import 'package:wordle_fa_pa/widgets/dialogs/language_dialog.dart';
 
 void main() async {
@@ -50,18 +46,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   String resultMessage = '';
   MessageType messageType = MessageType.info;
   GameResult gameResult = GameResult.none;
-  late GoogleRewardedAd ad;
-
-  @override
-  void initState() {
-    ad = GoogleRewardedAd().load();
-
-    super.initState();
-  }
-
-  showRewardedAd() {
-    Future.delayed(const Duration(seconds: 3)).then((value) => ad.show());
-  }
 
   void onChar(String value) {
     if (value == 'clear') {
@@ -122,18 +106,12 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         gameResult = GameResult.win;
         resultMessage = ref.read(translationProvider('win'));
         messageType = MessageType.success;
-
-        // show rewarded ad
-        showRewardedAd();
       }
 
       if (guesses.length == 6 && !winningWord) {
         gameResult = GameResult.fail;
         resultMessage = ref.read(translationProvider('lose')) + ' ' + solution;
         messageType = MessageType.error;
-
-        // show rewarded ad
-        showRewardedAd();
       }
     }
 
@@ -185,10 +163,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               ),
             ),
           ),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: BannerAdWidget(),
-          )
         ],
       ),
     );
